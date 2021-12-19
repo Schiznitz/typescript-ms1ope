@@ -20,7 +20,6 @@ function xx() {
   canvas.style.left = `${x}px`;
   ctx.fillRect(0, 0, sz, sz);
   ctx.fillRect(w - sz, h - sz, sz, sz);
-  console.log(container.clientWidth, container.clientHeight);
 }
 xx();
 window.onresize = xx;
