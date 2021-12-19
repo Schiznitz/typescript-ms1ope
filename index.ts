@@ -9,8 +9,10 @@ const ratio = 9 / 16;
 const calcw = (h: number) => h * ratio;
 
 function xx() {
-  const h = container.clientHeight;
   const cw = container.clientWidth;
+  const ch = container.clientHeight;
+  const cr = cw / ch;
+  const h = ch;
   const w = calcw(h);
   const x = (cw - w) / 2;
   canvas.width = w;
