@@ -13,7 +13,7 @@ function xx() {
   const ch = container.clientHeight;
   const cr = cw / ch;
   const h = ch;
-  const w = calcw(h);
+  const w = cr < ratio ? cw : calcw(h);
   const x = (cw - w) / 2;
   canvas.width = w;
   canvas.height = h;
