@@ -104,20 +104,38 @@ export function calc_score(beats: Array<BeatData>, inputs: Array<PlayerInput>) {
     };
   });
   const map_beat_inputs = new Map<number, Array<number>>();
+  const map_input_beats = new Map<number, Array<number>>();
+  beats.forEach((_, i) => {
+    map_beat_inputs.set(i, []);
+  });
+  inputs.forEach((_, i) => {
+    map_input_beats.set(i, []);
+  });
   intervals.forEach((interval) => {
+    const beat = beats[interval.index];
     inputs.forEach((input, i_input) => {
-      if (input.time >= interval.min && input.time <= interval.max) {
-        if (!map_beat_inputs.has(interval.index))
-          map_beat_inputs.set(interval.index, []);
-        console.log('>', interval.index, i_input);
+      if (
+        input.code === beat.code &&
+        input.time >= interval.min &&
+        input.time <= interval.max
+      ) {
         map_beat_inputs.get(interval.index)?.push(i_input);
+        map_input_beats.get(i_input)?.push(interval.index);
       }
     });
   });
   map_beat_inputs.forEach((i_inputs, i_beat) => {
+    if (i_inputs.length < 2) return;
     const beat = beats[i_beat];
-    const _inputs = i_inputs.map((i) => inputs[i]);
+    i_inputs.sort(
+      (a, b) =>
+        Math.abs(beat.time - inputs[a].time) -
+        Math.abs(beat.time - inputs[b].time)
+    );
+    console.log('>>', i_inputs[0]);
   });
+  console.log(map_beat_inputs.size);
+  console.log(map_input_beats.size);
 }
 calc_score(
   [
@@ -133,15 +151,16 @@ calc_score(
       code: Enum.KeyCode.Left.Value,
       time: 100,
     },
-    {
-      code: Enum.KeyCode.Right.Value,
-      time: 100,
-    },
   ],
   [
     {
-      code: Enum.KeyCode.Left.Value,
-      time: 100,
+      code: Enum.KeyCode.Down.Value,
+      time: 102,
+      state: KeyInputState.KeyDown,
+    },
+    {
+      code: Enum.KeyCode.Down.Value,
+      time: 101,
       state: KeyInputState.KeyDown,
     },
   ]
